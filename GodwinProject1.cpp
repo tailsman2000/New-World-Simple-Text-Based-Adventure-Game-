@@ -3,7 +3,26 @@
 
 using namespace std;
 
-int main() {
+//Function that outputs a message, confirming the user wants to start
+//Message loops until the user chooses to start with confirm word
+string adventureStartConfirm(){
+    string adventureConfirm;
+    cout << "For this, you are going to need a bit of an imagination..." << endl;
+    cout << "So make sure tosit back, relax, and enjoy the tale!" << endl;
+    cout << "Are you ready? (type in YES!, or we cant let you experience the adventure....)" << endl;
+    cin >> adventureConfirm;
+
+    cin.ignore();
+    while (adventureConfirm != "YES!"){
+        cout << "C'mon, the world is waiting for ya." << endl;
+        cout << "Let's try this again..." << endl; 
+        cout << "Are you ready? (type in YES!, or we cant let you experience the adventure....)" << endl;
+        cin >> adventureConfirm;
+    }
+    return "Let the journey begin, have fun!";
+}
+
+int main(){
     string userName;
     int userNameConfirm;
     
@@ -29,10 +48,13 @@ int main() {
         // Clear the newline character again after cin
         cin.ignore();
     }
+    
 
     cout << "Great! Welcome to the adventure, " << userName << "!" << endl;
-    
-    
+
+    //Declaring the adventure start function
+    string adventureBeginMessage = adventureStartConfirm();
+    cout << adventureBeginMessage << endl;
 
     return 0;
 }
