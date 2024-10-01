@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -21,6 +22,24 @@ string adventureStartConfirm(){
     }
     return "Let the journey begin, have fun!";
 }
+
+// Function that displays a block of text and waits for the user to press 1 to continue
+void displayTextAndContinue(const string& text) {
+    cout << text << endl; // Display the text
+
+    int userInput = 0;
+    cout << "Press 1 to continue..." << endl;
+
+    // Loop until the user presses 1
+    while (userInput != 1) {
+        cin >> userInput;
+        if (userInput != 1) {
+            cout << "Please press 1 to continue." << endl;
+        }
+    }
+    // Clear any remaining input
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+} 
 
 int main(){
     string userName;
@@ -56,5 +75,10 @@ int main(){
     string adventureBeginMessage = adventureStartConfirm();
     cout << adventureBeginMessage << endl;
 
+    cout << "It's raining... \n";
+    cout << "You return home from a long day of work. \n";
+    cout << "Exhausted, the f";
+
     return 0;
 }
+
