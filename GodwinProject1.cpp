@@ -38,6 +38,22 @@ void saveGame(bool hasForestItem, bool hasCaveItem, bool hasMountainItem, bool h
     cout << "Your progress has been saved. Your save password is: " << password << endl;
 }
 
+// Function to load the game based on password
+void loadGameFromPassword(const string& password, bool &hasForestItem, bool &hasCaveItem, bool &hasMountainItem, bool &hasLakeItem) {
+    if (password.length() == 4) {
+        hasForestItem = (password[0] == 'F');
+        hasCaveItem = (password[1] == 'C');
+        hasMountainItem = (password[2] == 'M');
+        hasLakeItem = (password[3] == 'L');
+    } else {
+        cout << "Invalid password! Starting a new game." << endl;
+        hasForestItem = false;
+        hasCaveItem = false;
+        hasMountainItem = false;
+        hasLakeItem = false;
+    }
+}
+
 // Function that outputs a message, confirming the user wants to start
 string adventureStartConfirm() {
     string adventureConfirm;
@@ -160,43 +176,59 @@ void mainMenu(bool &hasForestItem, bool &hasCaveItem, bool &hasMountainItem, boo
 int main() {
     string userName;
     int userNameConfirm;
-    
-    cout << "Welcome to the adventure! \n";
-    cout << "To start off, let's get your first name.\n";
-    
-    getline(cin, userName);
-    
-    cout << userName << "? Are you sure? (1 = yes, 2 = no, change it)\n";
-    cin >> userNameConfirm;
-    cin.ignore(); // Clear the buffer
-    
-    while (userNameConfirm == 2) {
-        cout << "Please re-enter your first name.\n";
-        getline(cin, userName);
-        cout << userName << "? Are you sure? (1 = yes, 2 = no, change it)\n";
-        cin >> userNameConfirm;
-        cin.ignore(); // Clear the buffer again
-    }
-    
-    cout << "Great! Welcome to the adventure, " << userName << "!" << endl;
-    
-    string adventureBeginMessage = adventureStartConfirm();
-    cout << adventureBeginMessage << endl;
-
-    transitionToFantasyWorld();
-
-    // Tracking player's progress
     bool hasForestItem = false;
     bool hasCaveItem = false;
     bool hasMountainItem = false;
     bool hasLakeItem = false;
+    
+    cout << "Welcome to the adventure! \n";
+    cout << "1. Start a new game\n";
+    cout << "2. Load from password\n";
+    
+    int menuChoice;
+    cin >> menuChoice;
+    cin.ignore(); // Clear input buffer
+
+    if (menuChoice == 2) {
+        string password;
+        cout << "Please enter your save password: ";
+        cin >> password;
+        loadGameFromPassword(password, hasForestItem, hasCaveItem, hasMountainItem, hasLakeItem);
+        cin.ignore(); // Clear input buffer
+    }
+
+    if (menuChoice == 1 || (menuChoice == 2 && !hasForestItem && !hasCaveItem && !hasMountainItem && !hasLakeItem)) {
+        cout << "To start off, let's get your first name.\n";
+        getline(cin, userName);
+    
+        cout << userName << "? Are you sure? (1 = yes, 2 = no, change it)\n";
+        cin >> userNameConfirm;
+        cin.ignore(); // Clear the buffer
+    
+        while (userNameConfirm == 2) {
+            cout << "Please re-enter your first name. \n";
+            getline(cin, userName);  // Get the new name
+    
+            cout << userName << "? Are you sure? (1 = yes, 2 = no, change it)\n";
+            cin >> userNameConfirm;
+            cin.ignore();  // Clear the buffer
+        }
+
+        cout << "Great! Welcome to the adventure, " << userName << "!" << endl;
+
+        // Start the adventure with the intro and confirmation
+        string adventureBeginMessage = adventureStartConfirm();
+        cout << adventureBeginMessage << endl;
+
+        transitionToFantasyWorld();
+    }
 
     // Main game loop
     while (!hasForestItem || !hasCaveItem || !hasMountainItem || !hasLakeItem) {
         mainMenu(hasForestItem, hasCaveItem, hasMountainItem, hasLakeItem);
     }
 
-    // Once all items are collected, explore the final castle
+    // Once all items are collected, proceed to the final stage
     exploreCastle();
 
     return 0;
